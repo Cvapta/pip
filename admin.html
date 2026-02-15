@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>минималистичная регистрация</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #fff;
+            line-height: 1.5;
+        }
+
+        .screen {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .register-card {
+            max-width: 400px;
+            width: 100%;
+            background: rgba(18, 18, 18, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 48px;
+            padding: 3rem 2.2rem;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+            text-align: center;
+        }
+
+        .icon-wrapper {
+            margin-bottom: 2rem;
+        }
+
+        .icon-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 28px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #111;
+            display: inline-block;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255, 255, 255, 0.35);
+            margin-bottom: 0.5rem;
+            margin-left: 0.75rem;
+        }
+
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-field {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 44px;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            color: white;
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+            backdrop-filter: blur(4px);
+        }
+
+        #password {
+            padding-right: 3.2rem;
+        }
+
+        .input-field:focus {
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.02);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1.2rem;
+            padding: 0.3rem 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+            border-radius: 30px;
+            width: 40px;
+            height: 40px;
+        }
+
+        .toggle-password:hover {
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .toggle-password:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .login-button {
+            background: rgba(255, 255, 255, 0.3);
+            color: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 44px;
+            padding: 1.1rem 1.8rem;
+            font-size: 1.2rem;
+            font-weight: 550;
+            letter-spacing: -0.02em;
+            width: 100%;
+            margin-top: 2rem;
+            cursor: not-allowed;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255,255,255,0.1);
+            pointer-events: none;
+            font-family: inherit;
+        }
+
+        .login-button.active {
+            background: #ffffff;
+            color: #000;
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.3);
+        }
+
+        .login-button.active:hover {
+            background: #f0f0f0;
+            transform: scale(1.01);
+        }
+
+        .login-button.active:active {
+            transform: scale(0.99);
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: black;
+            display: flex;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .fullscreen-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: black;
+            pointer-events: none;
+        }
+
+        .video-overlay.active {
+            opacity: 1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="screen" id="registerScreen">
+        <div class="register-card">
+            <!-- сверху icon.png (ваш файл) -->
+            <div class="icon-wrapper">
+                <img src="icon.png" alt="icon" class="icon-img">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" for="login">логин</label>
+                <input type="text" id="login" class="input-field" value="" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" for="password">пароль</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" class="input-field" value="" autocomplete="off">
+                    <button class="toggle-password" id="togglePassword" type="button" aria-label="показать пароль">
+                        👁️
+                    </button>
+                </div>
+            </div>
+
+            <button class="login-button" id="enterBtn" disabled>войти</button>
+        </div>
+    </div>
+
+    <div class="video-overlay" id="videoOverlay">
+        <video id="fullscreenVideo" class="fullscreen-video" preload="auto" playsinline>
+            <source src="lol.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <script>
+        (function() {
+            const loginInput = document.getElementById('login');
+            const passwordInput = document.getElementById('password');
+            const enterBtn = document.getElementById('enterBtn');
+            const videoOverlay = document.getElementById('videoOverlay');
+            const videoElement = document.getElementById('fullscreenVideo');
+            const togglePassword = document.getElementById('togglePassword');
+
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.textContent = type === 'password' ? '👁️' : '👁️‍🗨️';
+            });
+
+            function checkFields() {
+                const loginFilled = loginInput.value.trim() !== '';
+                const passwordFilled = passwordInput.value.trim() !== '';
+                
+                if (loginFilled && passwordFilled) {
+                    enterBtn.classList.add('active');
+                    enterBtn.disabled = false;
+                } else {
+                    enterBtn.classList.remove('active');
+                    enterBtn.disabled = true;
+                }
+            }
+
+            loginInput.addEventListener('input', checkFields);
+            passwordInput.addEventListener('input', checkFields);
+
+            enterBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                if (loginInput.value.trim() === '' || passwordInput.value.trim() === '') return;
+
+                videoOverlay.classList.add('active');
+
+                videoElement.volume = 1.0;
+                videoElement.muted = false;
+                
+                let playPromise = videoElement.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.warn('Автовоспроизведение не удалось, пробуем снова');
+                        videoElement.play().catch(e => {});
+                    });
+                }
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (videoOverlay.classList.contains('active')) {
+                    const keysToBlock = [' ', 'Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'k', 'K', 'f', 'F', 'm', 'M'];
+                    if (keysToBlock.includes(e.key) || e.code === 'Space' || e.key === ' ') {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return false;
+                    }
+                    if (e.key === 'Escape') {
+                        e.preventDefault();
+                    }
+                }
+            }, true);
+
+            videoElement.addEventListener('contextmenu', (e) => e.preventDefault());
+            videoElement.addEventListener('error', (e) => {
+                console.warn('Видео не загрузилось');
+            });
+
+            checkFields();
+        })();
+    </script>
+</body>
+</html>
