@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>book</title>
+    <style>
+        /* Сбрасываем все отступы и делаем фон черным */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000000; /* Чёрный фон */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center; /* Горизонтальное выравнивание */
+            align-items: center;     /* Вертикальное выравнивание */
+            font-family: sans-serif; /* На случай, если добавится текст */
+        }
+
+        img {
+            display: block; /* Убирает лишний отступ снизу у картинки */
+            max-width: 100%;  /* Адаптивность: на узких экранах картинка будет сжиматься */
+            max-height: 100vh; /* Чтобы картинка не выходила за пределы экрана по высоте */
+            object-fit: contain; /* Сохраняем пропорции */
+            box-shadow: 0 0 10px rgba(255,255,255,0.1); /* Совсем легкая тень, чтобы углы книги не терялись на фоне (опционально) */
+        }
+    </style>
+</head>
+<body>
+    <img src="book.jpg" alt="book">
+</body>
+</html>
