@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Видео по нажатию</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: black;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 24px;
+      background: rgba(0, 0, 0, 0.25);
+      transition: opacity 0.3s ease;
+      user-select: none;
+    }
+
+    .overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="player">
+    <video id="video" preload="metadata" playsinline>
+      <source src="supergood.mp4" type="video/mp4" />
+      Ваш браузер не поддерживает видео.
+    </video>
+    <div class="overlay" id="overlay">Нажми, чтобы включить видео</div>
+  </div>
+
+  <script>
+    const video = document.getElementById("video");
+    const overlay = document.getElementById("overlay");
+    const player = document.getElementById("player");
+
+    // Загружаем первый кадр
+    video.currentTime = 0.01;
+    video.pause();
+
+    player.addEventListener("click", async () => {
+      try {
+        await video.play();
+        overlay.classList.add("hidden");
+      } catch (error) {
+        console.error("Не удалось запустить видео:", error);
+      }
+    });
+
+    video.addEventListener("pause", () => {
+      if (!video.ended) {
+        overlay.classList.remove("hidden");
+      }
+    });
+
+    video.addEventListener("ended", () => {
+      overlay.classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>
